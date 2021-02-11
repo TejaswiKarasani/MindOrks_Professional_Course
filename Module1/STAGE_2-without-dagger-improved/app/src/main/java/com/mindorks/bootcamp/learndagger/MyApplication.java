@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.mindorks.bootcamp.learndagger.data.local.DatabaseService;
 import com.mindorks.bootcamp.learndagger.data.remote.NetworkService;
+import com.mindorks.bootcamp.learndagger.di.components.ApplicationComponent;
 import com.mindorks.bootcamp.learndagger.di.components.DaggerApplicationComponent;
 import com.mindorks.bootcamp.learndagger.di.modules.ApplicationModule;
 
@@ -16,14 +17,17 @@ public class MyApplication extends Application {
     @Inject
     public DatabaseService databaseService;
 
+    public ApplicationComponent component;
+
     @Override
     public void onCreate() {
         super.onCreate();
 
-        DaggerApplicationComponent
+        component = DaggerApplicationComponent
                 .builder()
                 .applicationModule(new ApplicationModule(this))
-                .build()
-                .supply(this);
+                .build();
+
+        component.inject(this);
     }
 }
